@@ -25,11 +25,28 @@
 //lighting functions
 color get_lighting( double *normal, double *view, color alight, double light[2][3], double *areflect, double *dreflect, double *sreflect) {
   color i;
+  color a;
+  color d;
+  color s;
+
+  a = calculate_ambient(alight, areflect);
+  d = calculate_diffuse(light, dreflect, normal);
+  s = calculate_specular(light, sreflect, view, normal);
+
+  i.red = a.red + d.red + s.red;
+  i.green = a.green + d.green + s.green;
+  i.blue = a.blue + d.blue + s.blue;
+
   return i;
 }
 
 color calculate_ambient(color alight, double *areflect ) {
   color a;
+
+  a.red = alight.red * areflect[0];
+  a.green = alight.green * areflect[1];
+  a.blue = alight.blue * areflect[2];
+
   return a;
 }
 
@@ -46,6 +63,17 @@ color calculate_specular(double light[2][3], double *sreflect, double *view, dou
 
 //limit each component of c to a max of 255
 void limit_color( color * c ) {
+  if (c->red > 255){
+    c->red = 255;
+  }
+
+  if (c->green > 255){
+    c->green = 255;
+  }
+
+  if (c->blue > 255){
+    c->blue = 255;
+  }
 }
 
 //vector functions
