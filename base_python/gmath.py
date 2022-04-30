@@ -22,19 +22,60 @@ SPECULAR_EXP = 4
 
 #lighting functions
 def get_lighting(normal, view, ambient, light, areflect, dreflect, sreflect ):
-    return [0, 0, 0]
+    color = [0,0,0];
+    ambient = [0,0,0];
+    diffuse = [0,0,0];
+    specular = [0,0,0];
+
+    a = calculate_ambient(ambient, areflect);
+    d = calculate_diffuse(light, dreflect, normal);
+    s = calculate_specular(light, sreflect, view, normal);
+
+    color[0] = int(a[0]) + int(d[0]) + int(s[0]);
+    color[1] = int(a[1]) + int(d[1]) + int(s[1]);
+    color[2] = int(a[2]) + int(d[2]) + int(s[2]);
+
+    limit_color(color);
+
+    return color;
 
 def calculate_ambient(alight, areflect):
-    pass
+    a = [0, 0, 0];
+
+    a[0] = alight[0] * areflect[0];
+    a[1] = alight[1] * areflect[1];
+    a[2] = alight[2] * areflect[2];
+
+    return a;
 
 def calculate_diffuse(light, dreflect, normal):
-    pass
+    d = [0, 0, 0];
+    normalize(light[LOCATION]);
+    normalize(normal);
+
+    d[0] = light[COLOR][0] * dreflect[0] * dot_product(normal, light[LOCATION]);
+    d[1] = light[COLOR][1] * dreflect[1] * dot_product(normal, light[LOCATION]);
+    d[2] = light[COLOR][2] * dreflect[2] * dot_product(normal, light[LOCATION]);
+
+    return d;
 
 def calculate_specular(light, sreflect, view, normal):
-    pass
+    s = [0, 0, 0];
+    normalize(light[LOCATION]);
+    normalize(normal);
+
+    dpnl = (dot_product(normal, light[LOCATION]));
+
+    s[0] = light[COLOR][0] * sreflect[0] * pow(dpnl, SPECULAR_EXP);
+    s[1] = light[COLOR][1] * sreflect[1] * pow(dpnl, SPECULAR_EXP);
+    s[2] = light[COLOR][2] * sreflect[2] * pow(dpnl, SPECULAR_EXP);
+
+    return s;
 
 def limit_color(color):
-    pass
+    for i in range(0,3):
+        if color[i] > 255:
+            color[i] = 255;
 
 #vector functions
 #normalize vetor, should modify the parameter
