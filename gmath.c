@@ -33,9 +33,15 @@ color get_lighting( double *normal, double *view, color alight, double light[2][
   d = calculate_diffuse(light, dreflect, normal);
   s = calculate_specular(light, sreflect, view, normal);
 
-  i.red = a.red + d.red + s.red;
-  i.green = a.green + d.green + s.green;
-  i.blue = a.blue + d.blue + s.blue;
+  //i.red = a.red;// + d.red;// + s.red;
+  //i.green = a.green;// + d.green;// + s.green;
+  //i.blue = a.blue;// + d.blue;// + s.blue;
+
+  i.red = d.red;
+  i.green = d.green;
+  i.blue = d.blue;
+
+  limit_color(&i);
 
   return i;
 }
@@ -47,17 +53,68 @@ color calculate_ambient(color alight, double *areflect ) {
   a.green = alight.green * areflect[1];
   a.blue = alight.blue * areflect[2];
 
+  //printf("%d %d %d\n", a.red, a.green, a.blue);
+
+  //limit_color(&a);
+
   return a;
 }
 
 color calculate_diffuse(double light[2][3], double *dreflect, double *normal ) {
   color d;
+  d.red = 0;
+  d.green = 0;
+  d.blue = 0;
+
+  //double l[3] = {light[LOCATION][0] -}
+  normalize(normal);
+  normalize(light[LOCATION]);
+
+
+  float r = (light[COLOR][RED] * dreflect[0] * (dot_product(normal, light[LOCATION])));
+  float g = (light[COLOR][GREEN] * dreflect[1] * (dot_product(normal, light[LOCATION])));
+  float b = (light[COLOR][BLUE] * dreflect[2] * (dot_product(normal, light[LOCATION])));
+
+  if (r < 0){
+    d.red = 0;
+  } else {
+    d.red = r;
+  }
+
+  if (g < 0){
+    d.green = 0;
+  } else {
+    d.green = g;
+  }
+
+  if (b < 0){
+    d.blue = 0;
+  } else {
+    d.blue = b;
+  }
+
+  //printf("%d %d %d\n", d.red, d.green, d.blue);
+
+  //limit_color(&d);
+
   return d;
 }
 
 color calculate_specular(double light[2][3], double *sreflect, double *view, double *normal ) {
-
   color s;
+  /*
+  normalize(normal);
+  normalize(light[LOCATION]);
+
+  long nl = dot_product(normal, light[LOCATION]);
+  normal[0] = 2 * nl * normal[0];
+  normal[1] = 2 * nl * normal[1];
+  normal[2] = 2 * nl * normal[2];
+
+  s.red = light[COLOR][RED] * sreflect[0] * pow((dot_product(normal, light[LOCATION])), SPECULAR_EXP);
+  s.green = light[COLOR][GREEN] * sreflect[1] * pow((dot_product(normal, light[LOCATION])), SPECULAR_EXP);
+  s.blue = light[COLOR][BLUE] * sreflect[2] * pow((dot_product(normal, light[LOCATION])), SPECULAR_EXP);
+  */
   return s;
 }
 
@@ -67,12 +124,24 @@ void limit_color( color * c ) {
     c->red = 255;
   }
 
+  if (c->red < 0){
+    c->red = 0;
+  }
+
   if (c->green > 255){
     c->green = 255;
   }
 
+  if (c->green < 0){
+    c->green = 0;
+  }
+
   if (c->blue > 255){
     c->blue = 255;
+  }
+
+  if (c->blue < 0){
+    c->blue = 0;
   }
 }
 

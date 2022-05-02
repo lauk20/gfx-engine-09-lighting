@@ -32,7 +32,7 @@ sreflect = [0.5,
 
 screen = new_screen()
 zbuffer = new_zbuffer()
-color = [ 0, 255, 0 ]
+color = [ 0, 255, 255 ]
 edges = []
 polygons = []
 t = new_matrix()

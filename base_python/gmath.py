@@ -35,6 +35,10 @@ def get_lighting(normal, view, ambient, light, areflect, dreflect, sreflect ):
     color[1] = int(a[1]) + int(d[1]) + int(s[1]);
     color[2] = int(a[2]) + int(d[2]) + int(s[2]);
 
+    #color[0] = int(d[0])
+    #color[1] = int(d[1])
+    #color[2] = int(d[2])
+
     limit_color(color);
 
     return color;
@@ -56,6 +60,9 @@ def calculate_diffuse(light, dreflect, normal):
     d[0] = light[COLOR][0] * dreflect[0] * dot_product(normal, light[LOCATION]);
     d[1] = light[COLOR][1] * dreflect[1] * dot_product(normal, light[LOCATION]);
     d[2] = light[COLOR][2] * dreflect[2] * dot_product(normal, light[LOCATION]);
+
+    #print(d);
+    print(int(d[0]), int(d[1]), int(d[2]))
 
     return d;
 
