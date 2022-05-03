@@ -101,18 +101,24 @@ color calculate_diffuse(double light[2][3], double *dreflect, double *normal ) {
 
   if (r < 0){
     d.red = 0;
+  } else if (r > 255){
+    d.red = 255;
   } else {
     d.red = r;
   }
 
   if (g < 0){
     d.green = 0;
+  } else if (g > 255){
+    d.green = 255;
   } else {
     d.green = g;
   }
 
   if (b < 0){
     d.blue = 0;
+  } else if (b > 255){
+    d.blue = 255;
   } else {
     d.blue = b;
   }
