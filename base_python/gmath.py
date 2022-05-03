@@ -73,9 +73,12 @@ def calculate_specular(light, sreflect, view, normal):
 
     dpnl = (dot_product(normal, light[LOCATION]));
 
-    s[0] = light[COLOR][0] * sreflect[0] * pow(dpnl, SPECULAR_EXP);
-    s[1] = light[COLOR][1] * sreflect[1] * pow(dpnl, SPECULAR_EXP);
-    s[2] = light[COLOR][2] * sreflect[2] * pow(dpnl, SPECULAR_EXP);
+    for i in range (0, 3):
+        normal[i] = 2 * normal[i] * dpnl - light[LOCATION][i];
+
+    s[0] = light[COLOR][0] * sreflect[0] * pow(dot_product(normal, view), SPECULAR_EXP);
+    s[1] = light[COLOR][1] * sreflect[1] * pow(dot_product(normal, view), SPECULAR_EXP);
+    s[2] = light[COLOR][2] * sreflect[2] * pow(dot_product(normal, view), SPECULAR_EXP);
 
     return s;
 

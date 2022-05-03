@@ -37,15 +37,18 @@ color get_lighting( double *normal, double *view, color alight, double light[2][
   int g = a.green + d.green + s.green;
   int b = a.blue + d.blue + s.blue;
 
-  if (r < 0){
+  r = s.red; g = s.green; b = s.blue;
+
+
+  if (r < 0 || r > 255){
     printf("r\n");
   }
 
-  if (g < 0){
+  if (g < 0 || g > 255){
     printf("g\n");
   }
 
-  if (b < 0){
+  if (b < 0 || b > 255){
     printf("b\n");
   }
 
@@ -147,6 +150,7 @@ color calculate_specular(double light[2][3], double *sreflect, double *view, dou
 
   normalize(normal);
   normalize(light[LOCATION]);
+  normalize(view);
 
   double nl = dot_product(normal, light[LOCATION]);
 
