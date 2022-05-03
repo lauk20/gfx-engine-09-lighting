@@ -33,9 +33,21 @@ color get_lighting( double *normal, double *view, color alight, double light[2][
   d = calculate_diffuse(light, dreflect, normal);
   s = calculate_specular(light, sreflect, view, normal);
 
-  float r = a.red + d.red + s.red;
-  float g = a.green + d.green + s.green;
-  float b = a.blue + d.blue + s.blue;
+  int r = a.red + d.red + s.red;
+  int g = a.green + d.green + s.green;
+  int b = a.blue + d.blue + s.blue;
+
+  if (r < 0){
+    printf("r\n");
+  }
+
+  if (g < 0){
+    printf("g\n");
+  }
+
+  if (b < 0){
+    printf("b\n");
+  }
 
   if (r < 0){
     i.red = 0;
@@ -136,11 +148,28 @@ color calculate_specular(double light[2][3], double *sreflect, double *view, dou
   normalize(normal);
   normalize(light[LOCATION]);
 
-  //long nl = dot_product(normal, light[LOCATION]);
+  double nl = dot_product(normal, light[LOCATION]);
 
-  float r = light[COLOR][RED] * sreflect[0] * pow((dot_product(normal, light[LOCATION])), SPECULAR_EXP);
-  float g = light[COLOR][GREEN] * sreflect[1] * pow((dot_product(normal, light[LOCATION])), SPECULAR_EXP);
-  float b = light[COLOR][BLUE] * sreflect[2] * pow((dot_product(normal, light[LOCATION])), SPECULAR_EXP);
+  int i;
+  for (i = 0; i < 3; i++){
+    normal[i] = 2 * normal[i] * nl - light[LOCATION][i];
+  }
+
+  double r = light[COLOR][RED] * sreflect[0] * pow((dot_product(normal, view)), SPECULAR_EXP);
+  double g = light[COLOR][GREEN] * sreflect[1] * pow((dot_product(normal, view)), SPECULAR_EXP);
+  double b = light[COLOR][BLUE] * sreflect[2] * pow((dot_product(normal, view)), SPECULAR_EXP);
+
+  if (r < 0 || r > 255){
+    printf("sr\n");
+  }
+
+  if (g < 0 || g > 255){
+    printf("sg\n");
+  }
+
+  if (b < 0 || b > 255){
+    printf("sb\n");
+  }
 
   if (r < 0){
     s.red = 0;

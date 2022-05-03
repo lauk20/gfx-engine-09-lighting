@@ -248,7 +248,7 @@ void add_box( struct matrix *polygons,
 
 
   //front
-  add_polygon(polygons, x, y, z, x1, y1, z, x1, y, z);
+  add_polygon(polygons, x0, y0, z0, x1, y1, z, x1, y, z);
   add_polygon(polygons, x, y, z, x, y1, z, x1, y1, z);
   //back
   add_polygon(polygons, x1, y, z1, x, y1, z1, x, y, z1);
