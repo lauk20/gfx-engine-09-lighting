@@ -33,13 +33,37 @@ color get_lighting( double *normal, double *view, color alight, double light[2][
   d = calculate_diffuse(light, dreflect, normal);
   s = calculate_specular(light, sreflect, view, normal);
 
-  //i.red = a.red;// + d.red;// + s.red;
-  //i.green = a.green;// + d.green;// + s.green;
-  //i.blue = a.blue;// + d.blue;// + s.blue;
+  float r = a.red + d.red + s.red;
+  float g = a.green + d.green + s.green;
+  float b = a.blue + d.blue + s.blue;
 
-  i.red = d.red;
-  i.green = d.green;
-  i.blue = d.blue;
+  if (r < 0){
+    i.red = 0;
+  } else if (r > 255){
+    i.red = 255;
+  } else {
+    i.red = r;
+  }
+
+  if (g < 0){
+    i.green = 0;
+  } else if (g > 255){
+    i.green = 255;
+  } else {
+    i.green = g;
+  }
+
+  if (b < 0){
+    i.blue = 0;
+  } else if (b > 255){
+    i.blue = 255;
+  } else {
+    i.blue = b;
+  }
+
+  //i.red = d.red;
+  //i.green = d.green;
+  //i.blue = d.blue;
 
   limit_color(&i);
 
@@ -102,19 +126,40 @@ color calculate_diffuse(double light[2][3], double *dreflect, double *normal ) {
 
 color calculate_specular(double light[2][3], double *sreflect, double *view, double *normal ) {
   color s;
-  /*
+
   normalize(normal);
   normalize(light[LOCATION]);
 
-  long nl = dot_product(normal, light[LOCATION]);
-  normal[0] = 2 * nl * normal[0];
-  normal[1] = 2 * nl * normal[1];
-  normal[2] = 2 * nl * normal[2];
+  //long nl = dot_product(normal, light[LOCATION]);
 
-  s.red = light[COLOR][RED] * sreflect[0] * pow((dot_product(normal, light[LOCATION])), SPECULAR_EXP);
-  s.green = light[COLOR][GREEN] * sreflect[1] * pow((dot_product(normal, light[LOCATION])), SPECULAR_EXP);
-  s.blue = light[COLOR][BLUE] * sreflect[2] * pow((dot_product(normal, light[LOCATION])), SPECULAR_EXP);
-  */
+  float r = light[COLOR][RED] * sreflect[0] * pow((dot_product(normal, light[LOCATION])), SPECULAR_EXP);
+  float g = light[COLOR][GREEN] * sreflect[1] * pow((dot_product(normal, light[LOCATION])), SPECULAR_EXP);
+  float b = light[COLOR][BLUE] * sreflect[2] * pow((dot_product(normal, light[LOCATION])), SPECULAR_EXP);
+
+  if (r < 0){
+    s.red = 0;
+  } else if (r > 255){
+    s.red = 255;
+  } else {
+    s.red = r;
+  }
+
+  if (g < 0){
+    s.green = 0;
+  } else if (g > 255){
+    s.green = 255;
+  } else {
+    s.green = g;
+  }
+
+  if (b < 0){
+    s.blue = 0;
+  } else if (b > 255){
+    s.blue = 255;
+  } else {
+    s.blue = b;
+  }
+
   return s;
 }
 
