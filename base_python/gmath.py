@@ -31,6 +31,23 @@ def get_lighting(normal, view, ambient, light, areflect, dreflect, sreflect ):
     d = calculate_diffuse(light, dreflect, normal);
     s = calculate_specular(light, sreflect, view, normal);
 
+    for i in range(0, 3):
+        if (a[i] > 255):
+            a[i] = 255;
+        elif (a[i] < 0):
+            a[i] = 0
+
+        if (d[i] > 255):
+            d[i] = 255;
+        elif (d[i] < 0):
+            d[i] = 0
+
+        if (s[i] > 255):
+            s[i] = 255;
+        elif (s[i] < 0):
+            s[i] = 0
+
+    #print(int(s[1]), s[1]);
     color[0] = int(a[0]) + int(d[0]) + int(s[0]);
     color[1] = int(a[1]) + int(d[1]) + int(s[1]);
     color[2] = int(a[2]) + int(d[2]) + int(s[2]);
@@ -39,7 +56,12 @@ def get_lighting(normal, view, ambient, light, areflect, dreflect, sreflect ):
     #color[1] = int(d[1])
     #color[2] = int(d[2])
 
+    #color[0] = int(s[0])
+    #color[1] = int(s[1])
+    #color[2] = int(s[2])
+
     limit_color(color);
+    #print(int(color[0]), int(color[1]), int(color[2]))
 
     return color;
 
@@ -62,7 +84,7 @@ def calculate_diffuse(light, dreflect, normal):
     d[2] = light[COLOR][2] * dreflect[2] * dot_product(normal, light[LOCATION]);
 
     #print(d);
-    print(int(d[0]), int(d[1]), int(d[2]))
+    #print(int(d[0]), int(d[1]), int(d[2]))
 
     return d;
 
@@ -70,15 +92,23 @@ def calculate_specular(light, sreflect, view, normal):
     s = [0, 0, 0];
     normalize(light[LOCATION]);
     normalize(normal);
+    normalize(view);
 
     dpnl = (dot_product(normal, light[LOCATION]));
 
     for i in range (0, 3):
         normal[i] = 2 * normal[i] * dpnl - light[LOCATION][i];
 
-    s[0] = light[COLOR][0] * sreflect[0] * pow(dot_product(normal, view), SPECULAR_EXP);
-    s[1] = light[COLOR][1] * sreflect[1] * pow(dot_product(normal, view), SPECULAR_EXP);
-    s[2] = light[COLOR][2] * sreflect[2] * pow(dot_product(normal, view), SPECULAR_EXP);
+    dpnv = dot_product(normal, view);
+    if (dpnv < 0):
+        dpnv = 0;
+
+    s[0] = light[COLOR][0] * sreflect[0] * pow(dpnv, SPECULAR_EXP);
+    s[1] = light[COLOR][1] * sreflect[1] * pow(dpnv, SPECULAR_EXP);
+    s[2] = light[COLOR][2] * sreflect[2] * pow(dpnv, SPECULAR_EXP);
+
+    #print(int(s[0]), int(s[1]), int(s[2]))
+    #print(dot_product(normal, view), pow(dot_product(normal, view), SPECULAR_EXP))
 
     return s;
 
