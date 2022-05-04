@@ -52,9 +52,9 @@ void clear_screen( screen s ) {
   int x, y;
   color c;
 
-  c.red = DEFAULT_COLOR;
-  c.green = DEFAULT_COLOR;
-  c.blue = DEFAULT_COLOR;
+  c.red = 255;
+  c.green = 255;
+  c.blue = 255;
 
   for ( y=0; y < YRES; y++ )
     for ( x=0; x < XRES; x++)
