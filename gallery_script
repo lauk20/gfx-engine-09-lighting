@@ -1,0 +1,46 @@
+push
+move
+225 250 0
+push
+rotate
+x 45
+rotate
+y 45
+scale
+2 2 2
+box
+-40 40 41 60 20 20
+box
+-40 40 60 60 20 20
+box
+-40.001 40 20 60 20 20
+box
+-40 60 50 60 20 20
+box
+-40 60 30 60 20 20
+box
+-40 80 40 60 20 20
+torus
+0 0 15 5 60
+sphere
+0 0 75 10
+sphere
+0 0 -45 10
+push
+move
+-15 0 15
+rotate
+y 90
+sphere
+0 0 75 10
+sphere
+0 0 -45 10
+pop
+push
+rotate
+z 45
+rotate
+x 45
+display
+save
+face.png
